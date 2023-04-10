@@ -1,0 +1,30 @@
+[Generator "Big Deal version 1.1.JFR"]
+[Event "Event"]
+[Board "1"]
+[Dealer "N"]
+[Vulnerable "None"]
+[Deal "N:A75.QJT76.875.K9 Q986432.9.96.AJ7 AQJ.T86542.A854. KJT.K32.KT432.Q3 "]
+[OptimumResultTable "Declarer;Denomination\2R;Result\2R"]
+N NT 4
+N S 8
+N H 3
+N D 9
+N C 5
+E S 4
+E H 10
+E D 4
+E C 8
+E NT 7
+S NT 4
+S S 9
+S H 3
+S D 9
+S C 5
+W NT 7
+W S 4
+W H 10
+W D 4
+W C 8
+[Ability "N: 4 8 3 9 5  E: 10 4 8 7 4  S: 4 9 3 9 5  W: 7 4 10 4 8 "]
+[OptimumScore "NS -100"]
+[Minimax "4SDS-100"]
