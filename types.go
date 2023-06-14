@@ -73,7 +73,7 @@ const (
 )
 
 func (v Vulnerability) String() string {
-	return [...]string{"None", "NS", "EW", "Both"}[v]
+	return [...]string{"None", "NS", "EW", "All"}[v]
 }
 
 func VulnerabilityFromString(s string) Vulnerability {

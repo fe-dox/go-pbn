@@ -16,8 +16,8 @@ type Hand map[Suit][]CardValue
 func (h *Hand) String() string {
 	var b strings.Builder
 	var i int
-	for _, cards := range *h {
-		for _, card := range cards {
+	for _, suit := range []Suit{Spades, Hearts, Diamonds, Clubs} {
+		for _, card := range (*h)[suit] {
 			b.WriteString(card.String())
 		}
 		i++
@@ -96,14 +96,26 @@ func (a *Ability) String() string {
 	var sb strings.Builder
 	var i int
 
-	for direction, results := range *a {
-
+	for _, direction := range []Direction{North, East, South, West} {
 		sb.WriteString(direction.String())
-		sb.WriteString(": ")
-
-		for _, result := range results {
-			sb.WriteString(strconv.Itoa(result))
-			sb.WriteString(" ")
+		sb.WriteString(":")
+		results := (*a)[direction]
+		for _, suit := range []Suit{NoTrump, Spades, Hearts, Diamonds, Clubs} {
+			result := results[suit]
+			if result < 10 {
+				sb.WriteString(strconv.Itoa(result))
+			} else {
+				switch result {
+				case 10:
+					sb.WriteString("A")
+				case 11:
+					sb.WriteString("B")
+				case 12:
+					sb.WriteString("C")
+				case 13:
+					sb.WriteString("D")
+				}
+			}
 		}
 
 		i++

@@ -3,10 +3,22 @@ package pbn
 import (
 	"fmt"
 	"io"
+	"log"
 )
 
-func (bs *BoardSet) Serialize() {
-
+func (bs *BoardSet) Serialize(w io.Writer, abilityAsTable bool) {
+	useBoardSetMetadata := bs.EventName != "" || bs.Generator != ""
+	for i := 0; i < len(bs.Boards); i++ {
+		if useBoardSetMetadata {
+			bs.Boards[i].EventName = bs.EventName
+			bs.Boards[i].Generator = bs.Generator
+		}
+		err := bs.Boards[i].Serialize(w, abilityAsTable)
+		if err != nil {
+			log.Printf("Error occured during parsing board number %d (%d): %s ", i, bs.Boards[i].Number, err.Error())
+			return
+		}
+	}
 }
 
 func (b *Board) Serialize(w io.Writer, abilityAsTable bool) error {
@@ -38,9 +50,14 @@ func (b *Board) Serialize(w io.Writer, abilityAsTable bool) error {
 	if err != nil {
 		return err
 	}
-	for _, hand := range b.Hands {
+	var j int
+	for _, direction := range []Direction{North, East, South, West} {
+		hand := b.Hands[direction]
 		_, err = io.WriteString(w, hand.String())
-		_, err = io.WriteString(w, " ")
+		j++
+		if j != 4 {
+			_, err = io.WriteString(w, " ")
+		}
 		if err != nil {
 			return err
 		}
@@ -68,6 +85,13 @@ func (b *Board) Serialize(w io.Writer, abilityAsTable bool) error {
 	}
 	if b.MinimaxScore.Level != 0 {
 		err = WriteTag("Minimax", b.MinimaxScore.String(), w)
+		if err != nil {
+			return err
+		}
+	}
+	_, err = io.WriteString(w, "\n")
+	if err != nil {
+		return err
 	}
 	return nil
 
@@ -86,9 +110,9 @@ func WriteOptimumResultTable(w io.Writer, ability Ability) error {
 	if err != nil {
 		return err
 	}
-	for direction, results := range ability {
-		for suit, result := range results {
-			_, err := io.WriteString(w, fmt.Sprintf("%s %s %d\n", direction.String(), suit.String(), result))
+	for _, direction := range []Direction{North, East, South, West} {
+		for _, suit := range []Suit{Clubs, Diamonds, Hearts, Spades, NoTrump} {
+			_, err = io.WriteString(w, fmt.Sprintf("%s %s %d\n", direction.String(), suit.String(), ability[direction][suit]))
 			if err != nil {
 				return err
 			}

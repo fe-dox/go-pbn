@@ -9,7 +9,7 @@ import (
 )
 
 func ParsePBN(s io.Reader) *BoardSet {
-	result := BoardSet{}
+	boardSet := BoardSet{}
 	scanner := bufio.NewScanner(s)
 	currentBoard := NewBoard()
 	expectOptimumResultTable := false
@@ -27,7 +27,7 @@ func ParsePBN(s io.Reader) *BoardSet {
 					currentOptimumResultTable = nil
 				}
 			}
-			result.Boards = append(result.Boards, *currentBoard)
+			boardSet.Boards = append(boardSet.Boards, *currentBoard)
 			currentBoard = NewBoard()
 			continue
 		}
@@ -47,11 +47,9 @@ func ParsePBN(s io.Reader) *BoardSet {
 			switch tag {
 			case "Event":
 				eventName := strings.TrimSuffix(strings.TrimPrefix(line, "[Event \""), "\"]")
-				result.EventName = eventName
 				currentBoard.EventName = eventName
 			case "Generator":
 				generator := strings.TrimSuffix(strings.TrimPrefix(line, "[Generator \""), "\"]")
-				result.Generator = generator
 				currentBoard.Generator = generator
 			case "Board":
 				boardNumber, err := strconv.Atoi(strings.TrimSuffix(strings.TrimPrefix(line, "[Board \""), "\"]"))
@@ -165,5 +163,5 @@ func ParsePBN(s io.Reader) *BoardSet {
 		}
 	}
 
-	return &result
+	return &boardSet
 }
