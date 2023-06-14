@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	pbn "go-pbn"
 	"log"
 	"os"
-	"pbn"
 )
 
 func main() {
-	file, err := os.Open("example-analysed.pbn")
+	file, err := os.Open("example-analysed.go-pbn")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -16,6 +16,6 @@ func main() {
 	fmt.Println("Starting parsing")
 	boards := pbn.ParsePBN(file)
 	log.Println(boards)
-	wFile, err := os.Create("test-board.pbn")
+	wFile, err := os.Create("test-board.go-pbn")
 	boards.Serialize(wFile, true)
 }
