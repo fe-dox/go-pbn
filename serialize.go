@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func (bs *BoardSet) Serialize(w io.Writer, abilityAsTable bool) {
+func (bs *BoardSet) Serialize(w io.Writer, abilityAsTable bool) error {
 	useBoardSetMetadata := bs.EventName != "" || bs.Generator != ""
 	for i := 0; i < len(bs.Boards); i++ {
 		if useBoardSetMetadata {
@@ -16,9 +16,10 @@ func (bs *BoardSet) Serialize(w io.Writer, abilityAsTable bool) {
 		err := bs.Boards[i].Serialize(w, abilityAsTable)
 		if err != nil {
 			log.Printf("Error occured during parsing board number %d (%d): %s ", i, bs.Boards[i].Number, err.Error())
-			return
+			return err
 		}
 	}
+	return nil
 }
 
 func (b *Board) Serialize(w io.Writer, abilityAsTable bool) error {

@@ -50,13 +50,13 @@ func DirectionFromString(s string) Direction {
 //goland:noinspection GoUnusedExportedFunction
 func DealerFromBoardNumber(n int) Direction {
 	switch n % 4 {
-	case 0:
-		return North
 	case 1:
-		return East
+		return North
 	case 2:
-		return South
+		return East
 	case 3:
+		return South
+	case 0:
 		return West
 	default:
 		return North
